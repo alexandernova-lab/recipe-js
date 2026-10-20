@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import BlogList from "../components/BlogList";
+import { Link } from "react-router";
 
 const Home = () => {
   const [recipes, setRecipes] = useState([]);
@@ -12,10 +13,20 @@ const Home = () => {
     fetchRecipes();
   }, []);
   return (
-    <div className="grid grid-cols-3 gap-4">
-      {!!recipes &&
-        recipes.map((recipe) => <BlogList recipe={recipe} key={recipe._id} />)}
-    </div>
+    <>
+      <Link
+        className="text-white font-bold bg-orange-400 px-4 py-2 rounded-md"
+        to={"/create-recipe"}
+      >
+        Create Recipe
+      </Link>
+      <div className="grid grid-cols-3 gap-4 mt-5">
+        {!!recipes &&
+          recipes.map((recipe) => (
+            <BlogList recipe={recipe} key={recipe._id} />
+          ))}
+      </div>
+    </>
   );
 };
 

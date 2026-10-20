@@ -4,6 +4,7 @@ import MainLayout from "../layout/MainLayout";
 import Home from "../pages/Home";
 import About from "../pages/About";
 import Contact from "../pages/Contact";
+import CreateRecipePage from "../pages/CreateRecipePage";
 
 const RouterApp = () => {
   const router = createBrowserRouter([
@@ -22,6 +23,10 @@ const RouterApp = () => {
         {
           path: "/contact",
           element: <Contact />,
+        },
+        {
+          path: "/create-recipe",
+          element: <CreateRecipePage />,
         },
       ],
     },
