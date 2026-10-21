@@ -1,6 +1,6 @@
 import Ingredients from "./Ingredients";
 
-const BlogList = ({ recipe }) => {
+const RecipeList = ({ recipe }) => {
   return (
     <>
       <div className="max-w-sm rounded-xl border border-gray-200 bg-white p-5 shadow-md">
@@ -15,4 +15,4 @@ const BlogList = ({ recipe }) => {
   );
 };
 
-export default BlogList;
+export default RecipeList;

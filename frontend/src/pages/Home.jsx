@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import BlogList from "../components/BlogList";
 import { Link } from "react-router";
+import RecipeList from "../components/RecipeList";
 
 const Home = () => {
   const [recipes, setRecipes] = useState([]);
@@ -23,7 +23,7 @@ const Home = () => {
       <div className="grid grid-cols-3 gap-4 mt-5">
         {!!recipes &&
           recipes.map((recipe) => (
-            <BlogList recipe={recipe} key={recipe._id} />
+            <RecipeList recipe={recipe} key={recipe._id} />
           ))}
       </div>
     </>
