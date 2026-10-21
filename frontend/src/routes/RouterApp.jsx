@@ -28,6 +28,10 @@ const RouterApp = () => {
           path: "/create-recipe",
           element: <CreateRecipePage />,
         },
+        {
+          path: "/update-recipe/:id",
+          element: <CreateRecipePage />,
+        },
       ],
     },
   ]);

@@ -15,8 +15,23 @@ const RecipeController = {
 
   getRecipes: async (req, res) => {
     try {
-      const recipes = await Recipe.find();
-      return res.status(200).json({ message: "All Recipes", recipes });
+      // For Pagination
+      const page = Number(req.query.page) || 1;
+      const limit = Math.min(Number(req.query.limit) || 6, 50);
+
+      const result = await Recipe.paginate(
+        {},
+        { page, limit, sort: { createdAt: -1 } },
+      );
+      return res.status(200).json({
+        message: "All Recipes",
+        recipes: result.docs,
+        page: result.page,
+        totalPages: result.totalPages,
+        totalRecipes: result.totalDocs,
+        hasNextPage: result.hasNextPage,
+        hasPrevPage: result.hasPrevPage,
+      });
     } catch (error) {
       return res.status(400).json({ message: "Something went wrong" });
     }

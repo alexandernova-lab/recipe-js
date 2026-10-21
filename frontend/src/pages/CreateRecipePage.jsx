@@ -2,12 +2,26 @@ import React, { useState } from "react";
 import Ingredients from "../components/Ingredients";
 import { CirclePlus } from "lucide-react";
 import axios from "axios";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import toast from "react-hot-toast";
+import { useEffect } from "react";
 
 const CreateRecipePage = () => {
+  const { id } = useParams();
   const [ingredients, setIngredients] = useState([]);
   const [newIngredient, setNewIngredient] = useState("");
+
+  useEffect(() => {
+    const fetchRecipe = async () => {
+      if (id) {
+        const res = await axios.get("http://localhost:4000/api/recipes/" + id);
+        setTitle(res.data.title);
+        setDescription(res.data.description);
+        setIngredients(res.data.ingredients);
+      }
+    };
+    fetchRecipe();
+  }, [id]);
 
   // Value From Form
   const [title, setTitle] = useState("");
@@ -30,13 +44,25 @@ const CreateRecipePage = () => {
         description,
         ingredients,
       };
-      const response = await axios.post(
-        "http://localhost:4000/api/recipes",
-        recipe,
-      );
-      if (response.status === 201) {
-        navigate("/");
-        toast.success("Recipe Created Successfully");
+      if (!id) {
+        const response = await axios.post(
+          "http://localhost:4000/api/recipes",
+          recipe,
+        );
+        if (response.status === 201) {
+          navigate("/");
+          toast.success("Recipe Created Successfully");
+        }
+      }
+      if (id) {
+        const response = await axios.patch(
+          "http://localhost:4000/api/recipes/" + id,
+          recipe,
+        );
+        if (response.status === 200) {
+          navigate("/");
+          toast.success("Recipe Updated Successfully");
+        }
       }
     } catch (e) {
       console.log(e);
@@ -45,7 +71,7 @@ const CreateRecipePage = () => {
   return (
     <div className=" max-w-md mx-auto">
       <h1 className=" text-2xl text-center text-orange-400 font-bold mb-5">
-        Create Recipe Page
+        {id ? "Update" : "Create"} Recipe Page
       </h1>
       <form onSubmit={createHandler} className=" space-y-5">
         <input
@@ -79,7 +105,7 @@ const CreateRecipePage = () => {
           type="submit"
           className=" px-4 py-2 bg-orange-400 text-white font-bold rounded-md w-full hover:bg-orange-300"
         >
-          Create Recipe
+          {id ? "Update" : "Create"} Recipe
         </button>
       </form>
     </div>
