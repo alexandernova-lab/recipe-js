@@ -5,6 +5,8 @@ import Home from "../pages/Home";
 import About from "../pages/About";
 import Contact from "../pages/Contact";
 import CreateRecipePage from "../pages/CreateRecipePage";
+import RegisterPage from "../pages/RegisterPage";
+import LoginPage from "../pages/LoginPage";
 
 const RouterApp = () => {
   const router = createBrowserRouter([
@@ -31,6 +33,14 @@ const RouterApp = () => {
         {
           path: "/update-recipe/:id",
           element: <CreateRecipePage />,
+        },
+        {
+          path: "/register",
+          element: <RegisterPage />,
+        },
+        {
+          path: "/login",
+          element: <LoginPage />,
         },
       ],
     },
