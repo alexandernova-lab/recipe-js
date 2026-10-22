@@ -34,6 +34,29 @@ const UserController = {
       res.status(500).json(error.message);
     }
   },
+  login: async (req, res) => {
+    try {
+      const { email, password } = req.body;
+      const existingUser = await User.findOne({ email });
+      if (!existingUser) {
+        throw new Error("Use does not exit");
+      }
+      // Compare Password
+      const isMatch = await bcrypt.compare(password, existingUser.password);
+      if (!isMatch) {
+        throw new Error("Incorrect Password");
+      }
+      //   Generate Toke and Set cookie
+      const token = generateToken(existingUser._id);
+      res.cookie("jwt", token, {
+        httpOnly: true,
+        maxAge: 3 * 24 * 60 * 60 * 1000,
+      });
+      res.status(200).json({ message: "Login Successful", existingUser });
+    } catch (error) {
+      res.status(400).json(error.message);
+    }
+  },
 };
 
 module.exports = UserController;

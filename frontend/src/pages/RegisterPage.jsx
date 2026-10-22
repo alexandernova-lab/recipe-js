@@ -1,9 +1,47 @@
-import React from "react";
+import axios from "axios";
+import React, { useState } from "react";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router";
 
 const RegisterPage = () => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState("");
+
+  //   Navigate
+  const navigate = useNavigate();
+
+  //   Register Handler
+  const registerHandler = async (e) => {
+    e.preventDefault();
+    try {
+      const data = {
+        name,
+        email,
+        password,
+      };
+      const res = await axios.post(
+        "http://localhost:4000/api/user/register",
+        data,
+        {
+          withCredentials: true,
+        },
+      );
+      if (res.status === 201) {
+        navigate("/");
+        toast.success("Register Successful");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-100 p-4">
-      <form className="w-full max-w-sm space-y-4 rounded-xl bg-white p-6 shadow-md">
+      <form
+        onSubmit={registerHandler}
+        className="w-full max-w-sm space-y-4 rounded-xl bg-white p-6 shadow-md"
+      >
         <div className="text-center">
           <h2 className="text-2xl font-bold text-gray-900">Create account</h2>
           <p className="mt-1 text-sm text-gray-500">
@@ -19,6 +57,8 @@ const RegisterPage = () => {
             Name
           </label>
           <input
+            value={name}
+            onChange={(e) => setName(e.target.value)}
             id="name"
             type="text"
             placeholder="John Doe"
@@ -34,6 +74,8 @@ const RegisterPage = () => {
             Email
           </label>
           <input
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             id="email"
             type="email"
             placeholder="john@example.com"
@@ -49,6 +91,8 @@ const RegisterPage = () => {
             Password
           </label>
           <input
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             id="password"
             type="password"
             placeholder="At least 8 characters"
