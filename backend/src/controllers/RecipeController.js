@@ -10,7 +10,7 @@ const RecipeController = {
       description,
       ingredients,
     });
-    return res.status(201).json({ message: "Recipe Created", recipe });
+    return res.status(200).json({ message: "Recipe Created", recipe });
   },
 
   getRecipes: async (req, res) => {

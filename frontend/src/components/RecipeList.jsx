@@ -6,6 +6,7 @@ const RecipeList = ({ recipe, onDeleted }) => {
   const deleteRecipeHandler = async () => {
     const response = await axios.delete(
       "http://localhost:4000/api/recipes/" + recipe._id,
+      { withCredentials: true },
     );
     if (response.status === 200) {
       onDeleted(recipe._id);
@@ -18,8 +19,7 @@ const RecipeList = ({ recipe, onDeleted }) => {
           <h3 className="text-xl font-bold text-gray-900">{recipe.title}</h3>
           <Link
             to={`update-recipe/${recipe._id}`}
-            className=" px-4 py-2 bg-green-500 text-white font-bold rounded-md cursor-pointer"
-          >
+            className=" px-4 py-2 bg-green-500 text-white font-bold rounded-md cursor-pointer">
             Update
           </Link>
         </div>
@@ -27,8 +27,7 @@ const RecipeList = ({ recipe, onDeleted }) => {
         <p className="mt-1 text-sm text-gray-600">{recipe.description}</p>
         <button
           className=" px-4 py-2 text-white font-bold bg-red-500 rounded-md"
-          onClick={deleteRecipeHandler}
-        >
+          onClick={deleteRecipeHandler}>
           Delete
         </button>
 
