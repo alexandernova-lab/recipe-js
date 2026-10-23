@@ -91,6 +91,14 @@ const RecipeController = {
       return res.status(400).json({ message: "Something went wrong" });
     }
   },
+  upload: (req, res) => {
+    try {
+      console.log(req.file);
+      res.json({ message: "Image Uploaded" });
+    } catch (error) {
+      return res.status(400).json({ message: "Something went wrong" });
+    }
+  },
 };
 
 module.exports = RecipeController;
