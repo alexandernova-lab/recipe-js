@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router";
+import { createBrowserRouter, Navigate } from "react-router";
 import { RouterProvider } from "react-router/dom";
 import MainLayout from "../layout/MainLayout";
 import Home from "../pages/Home";
@@ -7,8 +7,13 @@ import Contact from "../pages/Contact";
 import CreateRecipePage from "../pages/CreateRecipePage";
 import RegisterPage from "../pages/RegisterPage";
 import LoginPage from "../pages/LoginPage";
+import { useContext } from "react";
+import AuthContext from "../context/AuthContext";
 
 const RouterApp = () => {
+  // Context
+  const { user } = useContext(AuthContext);
+
   const router = createBrowserRouter([
     {
       path: "/",
@@ -16,7 +21,7 @@ const RouterApp = () => {
       children: [
         {
           path: "/",
-          element: <Home />,
+          element: user ? <Home /> : <Navigate to={"/login"} />,
         },
         {
           path: "/about",
@@ -28,7 +33,7 @@ const RouterApp = () => {
         },
         {
           path: "/create-recipe",
-          element: <CreateRecipePage />,
+          element: user ? <CreateRecipePage /> : <Navigate to={"/login"} />,
         },
         {
           path: "/update-recipe/:id",
@@ -36,11 +41,11 @@ const RouterApp = () => {
         },
         {
           path: "/register",
-          element: <RegisterPage />,
+          element: !user ? <RegisterPage /> : <Navigate to={"/"} />,
         },
         {
           path: "/login",
-          element: <LoginPage />,
+          element: !user ? <LoginPage /> : <Navigate to={"/"} />,
         },
       ],
     },
