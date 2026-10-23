@@ -1,5 +1,6 @@
 const { default: mongoose } = require("mongoose");
 const Recipe = require("../models/Recipe");
+const removeFile = require("../utils/removeFile");
 
 const RecipeController = {
   store: async (req, res) => {
@@ -59,6 +60,7 @@ const RecipeController = {
         return res.status(400).json({ message: "Not a valid id" });
       }
       const recipe = await Recipe.findByIdAndDelete(id);
+      await removeFile(__dirname + "/../../public" + recipe.photo);
       if (!recipe) {
         return res.status(404).json({ message: "Recipe not found" });
       }
@@ -83,6 +85,7 @@ const RecipeController = {
         },
         { new: true },
       );
+      await removeFile(__dirname + "/../../public" + recipe.photo);
       if (!recipe) {
         return res.status(404).json({ message: "Recipe not found" });
       }

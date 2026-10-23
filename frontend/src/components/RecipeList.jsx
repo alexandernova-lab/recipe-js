@@ -15,6 +15,7 @@ const RecipeList = ({ recipe, onDeleted }) => {
   return (
     <>
       <div className="max-w-sm rounded-xl border border-gray-200 bg-white p-5 shadow-md">
+        <img src={"http://localhost:4000" + recipe.photo} alt="" />
         <div className=" flex justify-between items-center">
           <h3 className="text-xl font-bold text-gray-900">{recipe.title}</h3>
           <Link
