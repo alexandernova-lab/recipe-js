@@ -1,9 +1,44 @@
-import React from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 const LoginPage = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  // Navigate
+  const navigate = useNavigate();
+
+  // Login Handler
+  const loginHandler = async (e) => {
+    e.preventDefault();
+    try {
+      const data = {
+        email,
+        password,
+      };
+      const res = await axios.post(
+        "http://localhost:4000/api/user/login",
+        data,
+        {
+          withCredentials: true,
+        },
+      );
+      if (res.status === 200) {
+        navigate("/");
+        toast.success("Login Success");
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-100 p-4">
-      <form className="w-full max-w-sm space-y-4 rounded-xl bg-white p-6 shadow-md">
+      <form
+        onSubmit={loginHandler}
+        className="w-full max-w-sm space-y-4 rounded-xl bg-white p-6 shadow-md"
+      >
         <div className="text-center">
           <h2 className="text-2xl font-bold text-gray-900">Welcome back</h2>
           <p className="mt-1 text-sm text-gray-500">Log in to your account</p>
@@ -17,6 +52,8 @@ const LoginPage = () => {
             Email
           </label>
           <input
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             id="email"
             type="email"
             placeholder="john@example.com"
@@ -32,6 +69,8 @@ const LoginPage = () => {
             Password
           </label>
           <input
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             id="password"
             type="password"
             placeholder="Enter your password"
