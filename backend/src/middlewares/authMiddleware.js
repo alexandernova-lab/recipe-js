@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const User = require("../models/User");
 
 const protect = (req, res, next) => {
   // Token
@@ -9,6 +10,10 @@ const protect = (req, res, next) => {
       if (err) {
         res.status(401).json({ message: "unauthenticated" });
       } else {
+        // Log in user
+        User.findById(decodedValue._id).then((user) => {
+          req.user = user;
+        });
         next();
       }
     });

@@ -3,6 +3,11 @@ const User = require("../models/User");
 const generateToken = require("../utils/generateToken");
 
 const UserController = {
+  me: async (req, res) => {
+    try {
+      res.status(200).json({ message: "User" });
+    } catch (error) {}
+  },
   register: async (req, res) => {
     try {
       const { name, email, password } = req.body;
