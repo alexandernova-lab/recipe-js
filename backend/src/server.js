@@ -5,6 +5,7 @@ const userRoutes = require("./routes/userRoutes");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
+const protect = require("./middlewares/authMiddleware");
 
 dotenv.config({
   path: ".env",
@@ -28,7 +29,7 @@ mongoose.connect(mongoUrl).then(() => {
 
 const PORT = process.env.PORT;
 
-app.use("/api/recipes", recipeRoutes);
+app.use("/api/recipes", protect, recipeRoutes);
 app.use("/api/user", userRoutes);
 
 app.listen(PORT, () => {
