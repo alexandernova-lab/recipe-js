@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router";
 import axios from "axios";
 import toast from "react-hot-toast";
+import AuthContext from "../context/AuthContext";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -9,6 +10,9 @@ const LoginPage = () => {
 
   // Navigate
   const navigate = useNavigate();
+
+  // Dispatch
+  const { dispatch } = useContext(AuthContext);
 
   // Login Handler
   const loginHandler = async (e) => {
@@ -26,6 +30,7 @@ const LoginPage = () => {
         },
       );
       if (res.status === 200) {
+        dispatch({ type: "LOGIN", payload: res.data.existingUser });
         navigate("/");
         toast.success("Login Success");
       }
@@ -37,8 +42,7 @@ const LoginPage = () => {
     <div className="flex min-h-screen items-center justify-center bg-gray-100 p-4">
       <form
         onSubmit={loginHandler}
-        className="w-full max-w-sm space-y-4 rounded-xl bg-white p-6 shadow-md"
-      >
+        className="w-full max-w-sm space-y-4 rounded-xl bg-white p-6 shadow-md">
         <div className="text-center">
           <h2 className="text-2xl font-bold text-gray-900">Welcome back</h2>
           <p className="mt-1 text-sm text-gray-500">Log in to your account</p>
@@ -47,8 +51,7 @@ const LoginPage = () => {
         <div>
           <label
             htmlFor="email"
-            className="mb-1 block text-sm font-medium text-gray-700"
-          >
+            className="mb-1 block text-sm font-medium text-gray-700">
             Email
           </label>
           <input
@@ -64,8 +67,7 @@ const LoginPage = () => {
         <div>
           <label
             htmlFor="password"
-            className="mb-1 block text-sm font-medium text-gray-700"
-          >
+            className="mb-1 block text-sm font-medium text-gray-700">
             Password
           </label>
           <input
@@ -80,8 +82,7 @@ const LoginPage = () => {
 
         <button
           type="submit"
-          className="w-full rounded-lg bg-blue-600 py-2 text-sm font-semibold text-white transition hover:bg-blue-700"
-        >
+          className="w-full rounded-lg bg-blue-600 py-2 text-sm font-semibold text-white transition hover:bg-blue-700">
           Log in
         </button>
 
@@ -89,8 +90,7 @@ const LoginPage = () => {
           Don't have an account?{" "}
           <a
             href="/register"
-            className="font-medium text-blue-600 hover:underline"
-          >
+            className="font-medium text-blue-600 hover:underline">
             Register
           </a>
         </p>
