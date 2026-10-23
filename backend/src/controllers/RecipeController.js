@@ -91,10 +91,19 @@ const RecipeController = {
       return res.status(400).json({ message: "Something went wrong" });
     }
   },
-  upload: (req, res) => {
+  upload: async (req, res) => {
     try {
-      console.log(req.file);
-      res.json({ message: "Image Uploaded" });
+      const { id } = req.params;
+      if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).json({ message: "Not a valid id" });
+      }
+      const recipe = await Recipe.findByIdAndUpdate(id, {
+        photo: "/" + req.file.filename,
+      });
+      if (!recipe) {
+        return res.status(404).json({ message: "Recipe not found" });
+      }
+      return res.status(200).json({ message: "Image Uploaded" });
     } catch (error) {
       return res.status(400).json({ message: "Something went wrong" });
     }
