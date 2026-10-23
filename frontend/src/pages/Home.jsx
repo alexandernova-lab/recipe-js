@@ -8,8 +8,14 @@ const Home = () => {
   const [totalPages, setTotalPages] = useState(1);
   useEffect(() => {
     const fetchRecipes = async () => {
-      const response = await fetch("http://localhost:4000/api/recipes");
+      const response = await fetch("http://localhost:4000/api/recipes", {
+        credentials: "include",
+      });
       const data = await response.json();
+      if (!response.ok) {
+        console.error("Backend error:", data);
+        return;
+      }
       setRecipes(data.recipes);
       setTotalPages(data.totalPages);
     };

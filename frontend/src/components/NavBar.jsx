@@ -1,6 +1,26 @@
-import { Link } from "react-router";
+import axios from "axios";
+import toast from "react-hot-toast";
+import { Link, useNavigate } from "react-router";
 
 const NavBar = () => {
+  // Naviage
+  const navigate = useNavigate();
+
+  // Logout Handler
+  const logoutHandler = async () => {
+    const res = await axios.post(
+      "http://localhost:4000/api/user/logout",
+      {},
+      {
+        withCredentials: true,
+      },
+    );
+    if (res.status === 200) {
+      navigate("/login");
+      toast.success("Logout success");
+    }
+  };
+
   return (
     <nav className=" flex justify-between items-center p-5">
       <h1 className=" text-3xl text-orange-400">Recipcity</h1>
@@ -28,6 +48,12 @@ const NavBar = () => {
         >
           Login
         </Link>
+        <button
+          onClick={logoutHandler}
+          className="px-4 py-2 bg-gray-400 text-white rounded-md hover:bg-orange-400"
+        >
+          Logout
+        </button>
       </div>
     </nav>
   );
