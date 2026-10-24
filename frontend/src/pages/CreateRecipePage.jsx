@@ -13,6 +13,9 @@ const CreateRecipePage = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
 
+  // Loading
+  const [loading, setLoading] = useState(false);
+
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState(null);
 
@@ -40,6 +43,7 @@ const CreateRecipePage = () => {
   const createHandler = async (e) => {
     e.preventDefault();
     try {
+      setLoading(true);
       const recipe = {
         title,
         description,
@@ -80,6 +84,7 @@ const CreateRecipePage = () => {
       );
       console.log(uploadRes);
       if (res.status === 200) {
+        setLoading(false);
         navigate("/");
       }
     } catch (e) {
@@ -134,8 +139,29 @@ const CreateRecipePage = () => {
         <Ingredients ingredients={ingredients} />
         <button
           type="submit"
-          className=" px-4 py-2 bg-orange-400 text-white font-bold rounded-md w-full hover:bg-orange-300">
-          {id ? "Update" : "Create"} Recipe
+          disabled={loading}
+          className="flex w-full items-center justify-center px-4 py-2 bg-orange-400 text-white font-bold rounded-md hover:bg-orange-300 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:bg-orange-400">
+          {loading && (
+            <svg
+              className="mr-3 size-5 animate-spin text-white"
+              viewBox="0 0 24 24"
+              fill="none">
+              <circle
+                className="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                strokeWidth="4"
+              />
+              <path
+                className="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+              />
+            </svg>
+          )}
+          {loading ? "Saving…" : `${id ? "Update" : "Create"} Recipe`}
         </button>
       </form>
     </div>

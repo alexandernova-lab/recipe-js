@@ -1,6 +1,8 @@
 const { default: mongoose } = require("mongoose");
 const Recipe = require("../models/Recipe");
 const removeFile = require("../utils/removeFile");
+const User = require("../models/User");
+const sendEmail = require("../utils/sendEmail");
 
 const RecipeController = {
   store: async (req, res) => {
@@ -10,6 +12,22 @@ const RecipeController = {
       title,
       description,
       ingredients,
+    });
+
+    // Send Email -> All Users -> Marketing Email
+    const users = await User.find({}, ["email"]);
+    let emails = users.map((user) => user.email);
+    emails = emails.filter((email) => email != req.user.email);
+
+    sendEmail({
+      view: "email",
+      data: {
+        name: req.user.name,
+        recipe,
+      },
+      from: req.user.email,
+      to: emails,
+      subject: "New Recipe is created by someone.",
     });
     return res.status(200).json({ message: "Recipe Created", recipe });
   },
