@@ -3,6 +3,7 @@ const Recipe = require("../models/Recipe");
 const removeFile = require("../utils/removeFile");
 const User = require("../models/User");
 const sendEmail = require("../utils/sendEmail");
+const emailQueue = require("../queues/emailQueue");
 
 const RecipeController = {
   store: async (req, res) => {
@@ -19,16 +20,18 @@ const RecipeController = {
     let emails = users.map((user) => user.email);
     emails = emails.filter((email) => email != req.user.email);
 
-    sendEmail({
+    // Email Queue
+    emailQueue.add({
       view: "email",
       data: {
         name: req.user.name,
         recipe,
       },
       from: req.user.email,
-      to: emails,
+      to: emails, //[],"hlaingminthan@gmail.com"
       subject: "New Recipe is created by someone.",
     });
+
     return res.status(200).json({ message: "Recipe Created", recipe });
   },
 
